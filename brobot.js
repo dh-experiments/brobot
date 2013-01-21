@@ -78,21 +78,38 @@ function OnInstantMessage(from, message) {
 
 	var first_name = mappings.handleToName(from)
 	var command = (message.toLowerCase()).split(' ');
+	var response = "";
 	console.log(command);
 
-	// ehow article howto
-	if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
-		var result = mappings.getArticle(command[2]);
-		if ( result ) {
-			this.SendMessage(from, "Hey "+first_name+", here's a "+command[2]+" article: \n"+result);
-		} else {
-			this.SendMessage(from, "Sorry I don't understand what you're looking for yet.");	
+	if ( from=="vivsloo" ) {
+		switch(Math.floor(Math.random()*3)) {
+			case 0:
+			response = "Hey "+first_name+", I know I'm just a little robot right now but when I learn to be smarter will you go out with me?";
+			break;
+			case 1:
+			response = "I have a robot crush on you.  What's your number?";
+			break;
+			case 2:
+			response = "Hold on, my master is teaching me pickup lines.";
+			break;
 		}
-	} else if ( command[0]=="hi" || command[0]=="hey" ) {
-		this.SendMessage(from, "Sup "+first_name+", you ready for some Hackathon excitement?!!");
-	} else {
-		this.SendMessage(from, "I got your message but my master is still teaching me what to do!");
+	// ehow article howto
+	} else {		
+		if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
+			var result = mappings.getArticle(command[2]);
+			if ( result ) {
+				response = "Hey "+first_name+", here's a "+command[2]+" article: \n"+result;
+			} else {
+				response = "Sorry I don't understand what you're looking for yet.";
+			}
+		} else if ( command[0]=="hi" || command[0]=="hey" ) {
+			response = "Sup "+first_name+", you ready for some Hackathon excitement?!!";
+		} else {
+			response = "I got your message but my master is still teaching me what to do!";
+		}
 	}
+	console.log("Reply: "+response);
+	this.SendMessage(from, response);
 }
 
 function OnTypingNotify(from, typing) {
@@ -106,6 +123,7 @@ function OnBuddyRequest(from, fname, lname, message) {
 	console.log('Buddy request from ' + fname + ' ' + lname + ' (' + from + ') [' + message + ']');
 	// Use
 	if ( mappings.validUser(from) ) {
+		console.log(from+" approved.");
 		this.ConfirmBuddy(from);
 	} else {
 		this.SendMessage(from, "Sorry "+from+", you are not on the approved list.");
