@@ -91,7 +91,7 @@ function OnInstantMessage(from, message) {
 	} else if ( command[0]=="hi" || command[0]=="hey" ) {
 		this.SendMessage(from, "Sup "+first_name+", you ready for some Hackathon excitement?!!");
 	} else {
-		this.SendMessage(from, "I got your message but I'm still learning what to do!");
+		this.SendMessage(from, "I got your message but my master is still teaching me what to do!");
 	}
 }
 
@@ -105,14 +105,12 @@ function OnTypingNotify(from, typing) {
 function OnBuddyRequest(from, fname, lname, message) {
 	console.log('Buddy request from ' + fname + ' ' + lname + ' (' + from + ') [' + message + ']');
 	// Use
-	// this.ConfirmBuddy(from);
 	if ( mappings.validUser(from) ) {
 		this.ConfirmBuddy(from);
 	} else {
 		this.SendMessage(from, "Sorry "+from+", you are not on the approved list.");
+		// this.RejectBuddy(from);
 	}
-	// or
-	// this.RejectBuddy(from);
 	// or
 	// nothing
 }

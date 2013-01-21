@@ -11,6 +11,10 @@ var users = {
 	'brock_meltzer' : {
 		first_name : 'Brock',
 		last_name : 'Meltzer'
+	},
+	'vivsloo' : {
+		first_name : 'Vivian',
+		last_name : 'Loo'
 	}
 };
 
