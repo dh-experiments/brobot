@@ -448,7 +448,7 @@ YBot.prototype.RemoveBuddy = function(id, group) {
  * @param id
  *		Buddy ID
  */
-YBot.prototype.ConfimBuddy = function(id) {
+YBot.prototype.ConfirmBuddy = function(id) {
 	if (!this.logged) return;
 	this.sendData(YBotService.AddRequest, YBotStatus.Available, [
 		[1,		this.userid],

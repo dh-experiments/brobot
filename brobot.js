@@ -106,8 +106,10 @@ function OnBuddyRequest(from, fname, lname, message) {
 	console.log('Buddy request from ' + fname + ' ' + lname + ' (' + from + ') [' + message + ']');
 	// Use
 	// this.ConfirmBuddy(from);
-	if ( validUser(from) ) {
+	if ( mappings.validUser(from) ) {
 		this.ConfirmBuddy(from);
+	} else {
+		this.SendMessage(from, "Sorry "+from+", you are not on the approved list.");
 	}
 	// or
 	// this.RejectBuddy(from);
