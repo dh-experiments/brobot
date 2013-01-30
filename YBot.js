@@ -604,7 +604,7 @@ YBot.prototype.botLogin = function(step) {
 }
 
 YBot.prototype.botLogout = function() {
-	this.sendData(YBotService.Logoff, YBotStatus.Available);
+	this.sendData(YBotService.Logoff, YBotStatus.Available, []);
 	this.logged = false;
 	this.emit('logout');
 }
@@ -631,10 +631,8 @@ YBot.prototype.ping = function() {
 
 YBot.prototype.getDataLength = function() {
 	var len = 0;
-	if ( typeof this.data != 'undefined' )
-		for (var i = 0; i < this.data.length; ++i)
-			len += ('' + this.data[i][0]).length + ('' + this.data[i][1]).length + 4;
-
+	for (var i = 0; i < this.data.length; ++i)
+		len += ('' + this.data[i][0]).length + ('' + this.data[i][1]).length + 4;
 	this.header.length = len;
 }
 
