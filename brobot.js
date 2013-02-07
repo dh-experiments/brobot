@@ -34,11 +34,11 @@ function OnError(errorCode) {
 }
 
 function OnLogin() {
-	console.log('Logged in');
+	console.log('Logged in at '+Date.now());
 }
 
 function OnLogout() {
-	console.log('Logged out');
+	console.log('Logged out at '+Date.now());
 }
 
 function OnTransferAllowed(id) {
