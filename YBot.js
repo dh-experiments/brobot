@@ -279,8 +279,12 @@ function YBot(userid, password) {
 	this.on('logout', function() {
 		clearInterval(self.keepAliveTimer);
 		clearInterval(self.pingTimer);
+		// Relogin
+		this.Start();
 	});
-	this.on('error', function() { this.Stop(); });
+	this.on('error', function() { 
+		this.Stop();
+	});
 	var dns = require('dns');
 	dns.resolve4(this.serverTr, function(e, adresses) {
 		self.servers = adresses;
