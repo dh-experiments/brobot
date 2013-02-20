@@ -30,6 +30,11 @@ module.exports = {
 
 			response = "*gives you a BIG hug*";
 
+		// Stock Quotes
+		} else if ( command[0]=="stock" ) {
+
+			stock();
+
 		// 8-ball
 		} else if ( command[0]=="8ball" || command[0]=="will" || command[0]+command[1]=="cani" ) {
 
@@ -62,6 +67,24 @@ module.exports = {
 	}
 
 };
+
+
+
+var http = require('http');
+
+var stock = function() {
+	var options = {
+		host: 'finance.yahoo.com',
+		port: 80,
+		path: '/d/?s=DMD&f=l1'
+	};
+
+	http.get(options, function(res) {
+		console.log("Got response: " + res.statusCode);
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
+}
 
 var eightball = function() {
 
