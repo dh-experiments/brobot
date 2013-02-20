@@ -1,4 +1,5 @@
 var mappings = require('./config/mappings.js');
+var http = require('http');
 
 module.exports = {
 
@@ -69,18 +70,31 @@ module.exports = {
 };
 
 
+var stock = function(ticker) {
 
-var http = require('http');
+	var symbol = ticker || 'DMD';
 
-var stock = function() {
 	var options = {
-		host: 'finance.yahoo.com',
+		host: 'query.yahooapis.com',
 		port: 80,
-		path: '/d/?s=DMD&f=l1'
+		path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
 	};
 
-	http.get(options, function(res) {
-		console.log("Got response: " + res.statusCode);
+	var req = http.get(options, function(res) {
+		
+		var response = "";
+
+		res.on('data', function (chunk) {
+			if(chunk[chunk.length-1]=='\n') {
+				response += chunk.slice(0,chunk.length-1);
+			} else {
+				response += chunk;
+			}
+		}).on('end', function(){
+			var data = JSON.parse(response);
+			console.log(data['query']['results']['quote']['LastTradePriceOnly']);
+		});
+
 	}).on('error', function(e) {
 		console.log("Got error: " + e.message);
 	});
