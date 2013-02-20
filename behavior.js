@@ -1,5 +1,6 @@
 var mappings = require('./config/mappings.js');
 var http = require('http');
+var natural = require('natural');
 
 module.exports = {
 
@@ -37,7 +38,7 @@ module.exports = {
 
 			usesCallback = true;
 			
-			stock('DMD', function(response){
+			stockQuote('DMD', function(response){
 				callback(response);
 			});
 
@@ -77,37 +78,68 @@ module.exports = {
 
 };
 
+var stockQuote = function(ticker, callback) {
 
-var stock = function(ticker, callback) {
+	var symbol = ticker || 'DMD',
+		dataPath = ['query','results','quote','LastTradePriceOnly'],
+		options = {
+			host: 'query.yahooapis.com',
+			port: 80,
+			path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
+		};
 
-	var symbol = ticker || 'DMD';
+	var replyFormat = "Current "+symbol+" ( http://finance.yahoo.com/q?s="+symbol+" ) price per share: $%@";
+
+	getData(options, replyFormat, dataPath, callback);
+}
+
+var getData = function(params, response, dataPath, callback) {
 
 	var options = {
-		host: 'query.yahooapis.com',
-		port: 80,
-		path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
+		host: params.host || 'query.yahooapis.com',
+		port: params.port || 80,
+		path: params.path || '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22DMD%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
 	};
 
 	var req = http.get(options, function(res) {
-		
-		var response = "";
-
+		var holder = "";  // holder
 		res.on('data', function (chunk) {
 			if(chunk[chunk.length-1]=='\n') {
-				response += chunk.slice(0,chunk.length-1);
+				holder += chunk.slice(0,chunk.length-1);
 			} else {
-				response += chunk;
+				holder += chunk;
 			}
 		}).on('end', function(){
-			var data = JSON.parse(response),
-				result = "Current "+ticker+" price per share: $"+data['query']['results']['quote']['LastTradePriceOnly'];
+			var data = JSON.parse(holder);
+			// var result = data['query']['results']['quote']['LastTradePriceOnly'];
+			var result = fetchDataPoint(data, dataPath);
 
-			callback(result);
+			if ( result ) {
+				callback(response.replace('%@',result));
+			} else {
+				return false;
+			}
 		});
 
 	}).on('error', function(e) {
 		console.log("Got error: " + e.message);
 	});
+}
+
+var fetchDataPoint = function(data, levels) {
+	
+	var result = data;
+	
+	for(var i=0, e=levels.length; i<e; i++) {
+		// data point exists
+		if ( result[ levels[i] ] ) {
+			result = result[levels[i]];
+		} else {
+			return false;
+		}
+	}
+
+	return result;
 }
 
 var eightball = function() {
@@ -122,7 +154,7 @@ var eightball = function() {
 		"Most likely :)",
 		"Outlook good... Oops I'm sorry, I was talking about my mail client.  Did you ask a question?",
 		"My bro-sense says yes.",
-		"I tried asking the tea leaf reader who blocks our door.  She said I'm violating her restraining order.  Try again later.",
+		"I tried asking the tea leaf reader who blocks our door.  Try again later.",
 		"Reply hazy, try again...",
 		"Ask again later...",
 		"Better not tell you now...",

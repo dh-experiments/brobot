@@ -15,6 +15,10 @@ var users = {
 	'vivsloo' : {
 		first_name : 'Vivian',
 		last_name : 'Loo'
+	},
+	'dklademand' : {
+		first_name : 'David',
+		last_name : 'Kim'
 	}
 };
 
