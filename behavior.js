@@ -2,6 +2,10 @@ var mappings = require('./config/mappings.js');
 var http = require('http');
 var natural = require('natural');
 
+/////////////////////////////////////////////////////////////////
+// Public Methods
+/////////////////////////////////////////////////////////////////
+
 module.exports = {
 
 	// Check user is whitelisted
@@ -18,7 +22,7 @@ module.exports = {
 			var result = mappings.getArticle(command[2]);
 			
 			if ( result ) {
-				response = "Hey "+first_name+", here's a "+command[2]+" article: \n"+result;
+				response = "Here's a "+command[2]+" article: \n"+result;
 			} else {
 				response = "Sorry I don't understand what you're looking for yet.";
 			}
@@ -78,6 +82,10 @@ module.exports = {
 
 };
 
+/////////////////////////////////////////////////////////////////
+// Private Methods
+/////////////////////////////////////////////////////////////////
+
 var stockQuote = function(ticker, callback) {
 
 	var symbol = ticker || 'DMD',
@@ -110,9 +118,8 @@ var getData = function(params, response, dataPath, callback) {
 				holder += chunk;
 			}
 		}).on('end', function(){
-			var data = JSON.parse(holder);
-			// var result = data['query']['results']['quote']['LastTradePriceOnly'];
-			var result = fetchDataPoint(data, dataPath);
+			var data = JSON.parse(holder),
+				result = fetchDataPoint(data, dataPath);
 
 			if ( result ) {
 				callback(response.replace('%@',result));
