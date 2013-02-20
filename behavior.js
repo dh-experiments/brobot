@@ -4,11 +4,12 @@ var http = require('http');
 module.exports = {
 
 	// Check user is whitelisted
-	interpretMessage: function(from, message) {
+	interpretMessage: function(from, message, callback) {
 		
 		var first_name = mappings.handleToName(from);
 		var command = (message.toLowerCase()).split(' ');
 		var response = "";
+		var usesCallback = false;
 
 		// eHow
 		if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
@@ -34,7 +35,11 @@ module.exports = {
 		// Stock Quotes
 		} else if ( command[0]=="stock" ) {
 
-			stock();
+			usesCallback = true;
+			
+			stock('DMD', function(response){
+				callback(response);
+			});
 
 		// 8-ball
 		} else if ( command[0]=="8ball" || command[0]=="will" || command[0]=="do" || command[0]=="does" || command[0]+command[1]=="cani" ) {
@@ -61,16 +66,19 @@ module.exports = {
 					response = "I got your message but my master is still teaching me what to do!";
 				break;				
 			}
+
 		}
 
-		return response;
-
+		// Regular responses that don't require callback
+		if(!usesCallback) {
+			callback(response);
+		}
 	}
 
 };
 
 
-var stock = function(ticker) {
+var stock = function(ticker, callback) {
 
 	var symbol = ticker || 'DMD';
 
@@ -91,8 +99,10 @@ var stock = function(ticker) {
 				response += chunk;
 			}
 		}).on('end', function(){
-			var data = JSON.parse(response);
-			console.log(data['query']['results']['quote']['LastTradePriceOnly']);
+			var data = JSON.parse(response),
+				result = "Current "+ticker+" price per share: $"+data['query']['results']['quote']['LastTradePriceOnly'];
+
+			callback(result);
 		});
 
 	}).on('error', function(e) {

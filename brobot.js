@@ -27,6 +27,7 @@ Bot.on('typing', OnTypingNotify);
 Bot.on('addRequest', OnBuddyRequest);
 Bot.on('keepAlive', OnKeepAlive);
 Bot.on('ping', OnPing);
+Bot.on('reply', OnReply);
 
 // Declare callback functions
 function OnError(errorCode) {
@@ -72,13 +73,12 @@ function OnBuzz(from) {
 }
 
 function OnInstantMessage(from, message) {
-	console.log(from + ' sent a message');
+	console.log(from + ' sent a message: '+message);
 
-	var response = behavior.interpretMessage(from, message);
-	
-	console.log("Reply: "+response);
-
-	this.SendMessage(from, response);
+	behavior.interpretMessage(from, message, function(response){
+		// Call reply event when ready
+		Bot.emit('reply', from, response);
+	});
 }
 
 function OnTypingNotify(from, typing) {
@@ -110,6 +110,11 @@ function OnPing() {
 	// This function is called every hour, I don't even know why I implemented it
 }
 
+function OnReply(from, response) {
+	console.log("Reply: "+response);
+
+	this.SendMessage(from, response);
+}
 
 
 // Start the bot process
