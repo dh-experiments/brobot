@@ -1,6 +1,11 @@
 var mappings = require('./config/mappings.js');
+var nlp = require('./nlp.js');
 var http = require('http');
 var natural = require('natural');
+
+natural.PorterStemmer.attach();
+
+var ng = natural.NGrams;
 
 /////////////////////////////////////////////////////////////////
 // Public Methods
@@ -15,6 +20,10 @@ module.exports = {
 		var command = (message.toLowerCase()).split(' ');
 		var response = "";
 		var usesCallback = false;
+
+		var stems = message.tokenizeAndStem("words");
+		console.log(stems);
+		console.log(nlp.classify(message));
 
 		// eHow
 		if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
@@ -96,7 +105,7 @@ var stockQuote = function(ticker, callback) {
 			path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
 		};
 
-	var replyFormat = "Current "+symbol+" ( http://finance.yahoo.com/q?s="+symbol+" ) price per share: $%@";
+	var replyFormat = "Current "+symbol+" [ http://finance.yahoo.com/q?s="+symbol+" ] price per share: $%@";
 
 	getData(options, replyFormat, dataPath, callback);
 }
@@ -161,7 +170,7 @@ var eightball = function() {
 		"Most likely :)",
 		"Outlook good... Oops I'm sorry, I was talking about my mail client.  Did you ask a question?",
 		"My bro-sense says yes.",
-		"I tried asking the tea leaf reader who blocks our door.  Try again later.",
+		"Ask the tea leaf reader who blocks our door.",
 		"Reply hazy, try again...",
 		"Ask again later...",
 		"Better not tell you now...",
