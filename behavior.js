@@ -37,7 +37,8 @@ module.exports = {
 				response = "Sorry I don't understand what you're looking for yet.";
 			}
 
-			eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
+			// eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
+			// outlook('Alex', callback);
 
 		// Greeting
 		} else if ( command[0]=="hi" || command[0]=="hey" || command[0]=="yo" ) {
@@ -109,6 +110,21 @@ var stockQuote = function(ticker, callback) {
 		};
 
 	var replyFormat = "Current "+symbol+" [ http://finance.yahoo.com/q?s="+symbol+" ] price per share: $%@";
+
+	getData(options, replyFormat, dataPath, callback);
+}
+
+var outlook = function(firstName, callback) {
+
+	var dataPath = ['response','Business Phone'],
+		path = '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}&filter={"Business%20Phone":1,"_id":0}',
+		replyFormat = firstName+"'s phone is: %@";
+
+	var options = {
+		host: 'bro.api.ehowdev.com',
+		port: 80,
+		path: path
+	};
 
 	getData(options, replyFormat, dataPath, callback);
 }
