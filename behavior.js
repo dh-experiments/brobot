@@ -17,13 +17,14 @@ module.exports = {
 	interpretMessage: function(from, message, callback) {
 		
 		var first_name = mappings.handleToName(from);
+		var context = nlp.classify(message);
 		var command = (message.toLowerCase()).split(' ');
 		var response = "";
 		var usesCallback = false;
 
 		var stems = message.tokenizeAndStem("words");
 		console.log(stems);
-		console.log(nlp.classify(message));
+		console.log(context);
 
 		// eHow
 		if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
@@ -35,6 +36,8 @@ module.exports = {
 			} else {
 				response = "Sorry I don't understand what you're looking for yet.";
 			}
+
+			eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
 
 		// Greeting
 		} else if ( command[0]=="hi" || command[0]=="hey" || command[0]=="yo" ) {
@@ -110,12 +113,41 @@ var stockQuote = function(ticker, callback) {
 	getData(options, replyFormat, dataPath, callback);
 }
 
+var eHowArticle = function(params, callback) {
+
+	var dataPath = ['response','_id'],
+		query = "",
+		replyFormat = "Here's a";
+
+	if ( params.type ) {
+		query += ',"content_type":"'+params.type+'"';
+		replyFormat += " "+params.type;
+	}
+
+	replyFormat += " article";
+
+	if ( params.category ) {
+		query += ',"category":"'+escape(params.category)+'"';
+		replyFormat += " in "+params.category;
+	}
+
+	var options = {
+		host: 'bro.api.ehowdev.com',
+		port: 80,
+		path: '/services/bro/?type=2&data={"type":"article"'+query+'}&filter={"_id":1}'
+	};
+
+	replyFormat += ":\n http://www.ehow.com%@";
+
+	getData(options, replyFormat, dataPath, callback);
+}
+
 var getData = function(params, response, dataPath, callback) {
 
 	var options = {
-		host: params.host || 'query.yahooapis.com',
+		host: params.host,
 		port: params.port || 80,
-		path: params.path || '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22DMD%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
+		path: params.path
 	};
 
 	var req = http.get(options, function(res) {
@@ -133,7 +165,7 @@ var getData = function(params, response, dataPath, callback) {
 			if ( result ) {
 				callback(response.replace('%@',result));
 			} else {
-				return false;
+				callback("Sorry, unable to find what you're looking for.");
 			}
 		});
 

@@ -39,6 +39,7 @@ module.exports = {
 		greeting : [
 			'hi',
 			'yo',
+			'yoyo',
 			'hello',
 			'hey',
 			'sup',

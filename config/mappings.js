@@ -22,6 +22,32 @@ var ehow = {
 		steps : "http://www.ehow.com/how_2019_clean-stove.html",
 		slideshow : "http://www.ehow.com/slideshow_12217485_quick-ways-save-1000-utility-bills.html",
 		slidestep : "http://www.ehow.com/about_4572236_how-many-americans-drink-coffee.html"
+	},
+	categories : {
+		1 : '/relationships-and-family/',
+		2 : '/pets-and-animals/',
+		3 : '/careers/',
+		4 : '/sports/',
+		5 : '/computers/',
+		6 : '/fashion-and-style/',
+		7 : '/cars/',
+		8 : '/business/',
+		9 : '/food-and-drink/',
+		10 : '/healthy-living/',
+		11 : '/hobbies-and-science/',
+		12 : '/home-design-and-decorating/',
+		14 : '/vacations-and-travel-planning/',
+		15 : '/holidays-and-celebrations/',
+		16 : '/electronics/',
+		17 : '/arts-and-entertainment/',
+		18 : '/culture-and-society/',
+		19 : '/education/',
+		20 : '/internet/',
+		21 : '/legal/',
+		22 : '/parenting/',
+		23 : '/weddings-and-parties/',
+		24 : '/personal-finance/',
+		25 : '/weddings-and-parties/'
 	}
 };
 
