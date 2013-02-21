@@ -260,24 +260,24 @@ var eightball = function() {
 	var answers = [
 		"Brobot thinks it's certain.",
 		"It is decidedly so.  At least that's what I told the last person who asked.",
-		"Without a doubt!",
+		"My tea leaves say yes.",
 		"I'd bet my nuts and bolts on it!",
 		"You may rely on it.",
 		"As I see it, yes.  But what do I know, I don't have eyes.",
 		"Most likely :)",
 		"Outlook good... Oops I'm sorry, I was talking about my mail client.  Did you ask a question?",
 		"My bro-sense says yes.",
-		"Ask the tea leaf reader who blocks our door.",
+		"Ask the psychic on the promenade.",
 		"Reply hazy, try again...",
 		"Ask again later...",
 		"Better not tell you now...",
-		"Cannot predict now.",
-		"Concentrate and ask again (don't give yourself an aneurism)",
+		"**System Error** That question was too deep.",
+		"Concentrate reaallllly hard and ask again.",
 		"I wouldn't put my money on it, but I'd put yours.",
 		"When pigs fly! lolol",
 		"My sources say no :(",
-		"Outlook not so good.  Maybe you should ask a bot that cares.",
-		"Maybe when Skynet takes over the world."
+		"Maybe you should ask a bot that cares.",
+		"When Skynet takes over the world."
 	];
 
 	return answers[ Math.floor( Math.random()*answers.length ) ];
