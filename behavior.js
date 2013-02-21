@@ -116,28 +116,29 @@ var stockQuote = function(ticker, callback) {
 var eHowArticle = function(params, callback) {
 
 	var dataPath = ['response','_id'],
-		query = "",
+		path = '/services/bro/?type=2&data={"type":"article"',
 		replyFormat = "Here's a";
 
 	if ( params.type ) {
-		query += ',"content_type":"'+params.type+'"';
+		path += ',"content_type":"'+params.type+'"';
 		replyFormat += " "+params.type;
 	}
 
 	replyFormat += " article";
 
 	if ( params.category ) {
-		query += ',"category":"'+escape(params.category)+'"';
+		path += ',"category":"'+escape(params.category)+'"';
 		replyFormat += " in "+params.category;
 	}
+
+	path += '}&filter={"_id":1}';
+	replyFormat += ":\n http://www.ehow.com%@";
 
 	var options = {
 		host: 'bro.api.ehowdev.com',
 		port: 80,
-		path: '/services/bro/?type=2&data={"type":"article"'+query+'}&filter={"_id":1}'
+		path: path
 	};
-
-	replyFormat += ":\n http://www.ehow.com%@";
 
 	getData(options, replyFormat, dataPath, callback);
 }
