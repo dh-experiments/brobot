@@ -12,6 +12,18 @@ module.exports = {
 			'slideshow',
 			'paginated article'
 		],
+		outlook : [
+			'what is phone number?',
+			'what is name\'s extension?',
+			'what is his number?',
+			'what is her number?',
+			'phone number',
+			'extension',
+			'contact info',
+			'office',
+			'office number',
+			'how can I reach'
+		],
 		jira : [
 			'my tickets',
 			'assigned to me',
