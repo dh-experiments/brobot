@@ -1,11 +1,8 @@
 var mappings = require('./config/mappings.js');
-var nlp = require('./nlp.js');
 var http = require('http');
-var natural = require('natural');
-
-natural.PorterStemmer.attach();
-
-var ng = natural.NGrams;
+var nlp = require('./nlp.js');
+var natural = require('natural'),
+	ng = natural.NGrams;
 
 /////////////////////////////////////////////////////////////////
 // Public Methods
@@ -16,75 +13,67 @@ module.exports = {
 	// Check user is whitelisted
 	interpretMessage: function(from, message, callback) {
 		
-		var first_name = mappings.handleToName(from);
-		var context = nlp.classify(message);
-		var command = (message.toLowerCase()).split(' ');
+		var firstName = mappings.handleToName(from);
+		var context = nlp.classify(message),
+			verifiedContext = false;
+		var words = message.split(' ');
 		var response = "";
 		var usesCallback = false;
 
-		var stems = message.tokenizeAndStem("words");
-		console.log(stems);
-		console.log(context);
+		switch( context ) {
 
-		// eHow
-		if ( command[0]=="ehow" && command[1]=="article" && command.length>=3 ) {
-
-			var result = mappings.getArticle(command[2]);
+			case 'ehow':
+				var result = mappings.getArticle(words[2]);
 			
-			if ( result ) {
-				response = "Here's a "+command[2]+" article: \n"+result;
-			} else {
-				response = "Sorry I don't understand what you're looking for yet.";
-			}
+				if ( result ) {
+					response = "Here's a "+words[2]+" article: \n"+result;
+				} else {
+					response = "Sorry I don't understand what you're looking for yet.";
+				}
 
-			// eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
-			// outlook('Alex', callback);
+				// eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
+			break;
 
-		// Greeting
-		} else if ( command[0]=="hi" || command[0]=="hey" || command[0]=="yo" ) {
+			case 'outlook':
+				outlook(words, callback);
+				usesCallback = true;
+			break;
 
-			response = "Sup "+first_name+", you ready for some Hackathon excitement?!!";
+			case 'jira':
+			break;
 
-		// Hug
-		} else if ( message.toLowerCase()=="i need a hug" ) {
+			case 'greeting':
+				response = "Sup "+firstName+", you ready for some Hackathon excitement?!!";
+				verifiedContext = true;
+			break;
 
-			response = "*gives you a BIG hug*";
+			case 'hug':
+				response = "*gives you a BIG hug*";
+				verifiedContext = true;
+			break;
 
-		// Stock Quotes
-		} else if ( command[0]=="stock" ) {
+			case 'stock':
+				response = "Temporarily disabled, but context is STOCK";
+				// usesCallback = true;
+				// stockQuote('DMD', function(response){
+				// 	callback(response);
+				// });
+			break;
 
-			usesCallback = true;
-			
-			stockQuote('DMD', function(response){
-				callback(response);
-			});
+			case 'eightball':
+				response = eightball();
+				verifiedContext = true;
+			break;
 
-		// 8-ball
-		} else if ( command[0]=="8ball" || command[0]=="will" || command[0]=="do" || command[0]=="does" || command[0]+command[1]=="cani" ) {
+			default:
+				response = iDontKnow(firstName);
+				verifiedContext = true;
+			break;
+		}
 
-			response = eightball();
-
-		// Don't understand
-		} else {
-
-			switch(Math.floor(Math.random()*7)) {
-				case 0:
-					response = "Hey "+first_name+", I know I'm just a little robot right now but when I learn to be smarter will you go out with me?";
-				break;
-
-				case 1:
-					response = "I have a robot crush on you.  What's your number?";
-				break;
-
-				case 2:
-					response = "Hold on, my master is teaching me pickup lines.";
-				break;
-
-				default:
-					response = "I got your message but my master is still teaching me what to do!";
-				break;				
-			}
-
+		// Unverified context
+		if(!verifiedContext) {
+			response = iDontKnow(firstName);
 		}
 
 		// Regular responses that don't require callback
@@ -98,6 +87,28 @@ module.exports = {
 /////////////////////////////////////////////////////////////////
 // Private Methods
 /////////////////////////////////////////////////////////////////
+
+
+var iDontKnow = function(name) {
+
+	var response = "I got your message but my master is still teaching me what to do!";
+
+	switch(Math.floor(Math.random()*7)) {
+		case 0:
+			response = "Hey "+name+", I know I'm just a little robot right now but when I learn to be smarter will you go out with me?";
+		break;
+
+		case 1:
+			response = "I have a robot crush on you.  What's your number?";
+		break;
+
+		case 2:
+			response = "Hold on, my master is teaching me pickup lines.";
+		break;			
+	}
+
+	return response;
+}
 
 var stockQuote = function(ticker, callback) {
 
@@ -114,19 +125,37 @@ var stockQuote = function(ticker, callback) {
 	getData(options, replyFormat, dataPath, callback);
 }
 
-var outlook = function(firstName, callback) {
+var outlook = function(words, callback) {
 
-	var dataPath = ['response','Business Phone'],
-		path = '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}&filter={"Business%20Phone":1,"_id":0}',
-		replyFormat = firstName+"'s phone is: %@";
+	var validName = false,
+		firstName;
 
-	var options = {
-		host: 'bro.api.ehowdev.com',
-		port: 80,
-		path: path
-	};
+	// Recognize name
+	for(var i=0, e=words.length; i<e; i++) {
+		// Get first and last characters
+		var lastChar = words[i].slice(-1),
+			firstChar = words[i].slice(0,1);
+		
+		if( lastChar == "\'s" || (firstChar == firstChar.toUpperCase() && i != 0) ) {
+			firstName = words[i];
+			validName = true;
+			console.log(words[i]);
+		}
+	}
 
-	getData(options, replyFormat, dataPath, callback);
+	if(validName) {
+		var dataPath = ['response','Business Phone'],
+			path = '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}&filter={"Business%20Phone":1,"_id":0}',
+			replyFormat = firstName+"'s phone is: %@";
+
+		var options = {
+			host: 'bro.api.ehowdev.com',
+			port: 80,
+			path: path
+		};
+
+		getData(options, replyFormat, dataPath, callback);
+	}
 }
 
 var eHowArticle = function(params, callback) {

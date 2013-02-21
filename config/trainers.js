@@ -15,8 +15,6 @@ module.exports = {
 		outlook : [
 			'what is phone number?',
 			'what is name\'s extension?',
-			'what is his number?',
-			'what is her number?',
 			'phone number',
 			'extension',
 			'contact info',
@@ -24,18 +22,27 @@ module.exports = {
 			'office number',
 			'how can I reach'
 		],
+		greeting : [
+			'hi',
+			'yo',
+			'yoyo',
+			'hello',
+			'hey',
+			'sup',
+			'what \'s up',
+			'what up'
+		],
 		jira : [
 			'my tickets',
 			'assigned to me',
-			'my assignments',
-			'what tickets do I have',
+			'tickets do I have',
 			'outstanding tickets',
 			'I am working on',
-			'What open tickets are assigned to me?',
-			'What are my jira tickets?',
-			'When was ticket released?',
-			'What\'s the status of ticket',
-			'What\'s the UAT URL of EH',
+			'open tickets assigned to me',
+			'my jira tickets',
+			'ticket released',
+			'status of ticket',
+			'UAT URL of EH',
 			'UAT'
 		],
 		stock : [
@@ -48,15 +55,6 @@ module.exports = {
 			'What is the Demand stock price?',
 			'What is the company stock price?'
 		],
-		greeting : [
-			'hi',
-			'yo',
-			'yoyo',
-			'hello',
-			'hey',
-			'sup',
-			'what\'s up'
-		],
 		eightball : [
 			'will I',
 			'will we',
@@ -67,6 +65,9 @@ module.exports = {
 			'do I',
 			'am I',
 			'can I'
+		],
+		hug : [
+			'I need a hug'
 		]
 	}
 
