@@ -21,30 +21,102 @@ var ehow = {
 		slidestep : "http://www.ehow.com/about_4572236_how-many-americans-drink-coffee.html"
 	},
 	categories : {
-		1 : '/relationships-and-family/',
-		2 : '/pets-and-animals/',
-		3 : '/careers/',
-		4 : '/sports/',
-		5 : '/computers/',
-		6 : '/fashion-and-style/',
-		7 : '/cars/',
-		8 : '/business/',
-		9 : '/food-and-drink/',
-		10 : '/healthy-living/',
-		11 : '/hobbies-and-science/',
-		12 : '/home-design-and-decorating/',
-		14 : '/vacations-and-travel-planning/',
-		15 : '/holidays-and-celebrations/',
-		16 : '/electronics/',
-		17 : '/arts-and-entertainment/',
-		18 : '/culture-and-society/',
-		19 : '/education/',
-		20 : '/internet/',
-		21 : '/legal/',
-		22 : '/parenting/',
-		23 : '/weddings-and-parties/',
-		24 : '/personal-finance/',
-		25 : '/weddings-and-parties/'
+		relationshipsandfamily : {
+			id : 1,
+			label : 'Relationships and Family'
+		},
+		petsandanimals : { 
+			id : 2,
+			label : 'Pets and Animals'
+		},
+		careers : { 
+			id : 3,
+			label : 'Careers'
+		},
+		sports : { 
+			id : 4,
+			label : 'Sports'
+		},
+		computers : { 
+			id : 5,
+			label : 'Computers'
+		},
+		fashionandstyle : { 
+			id : 6,
+			label : 'Fashion and Style'
+		},
+		cars : { 
+			id : 7,
+			label : 'Cars'
+		},
+		business : { 
+			id : 8,
+			label : 'Business'
+		},
+		foodanddrink : { 
+			id : 9,
+			label : 'Food and Drink'
+		},
+		healthyliving : { 
+			id : 10,
+			label : 'Healthy Living'
+		},
+		hobbiesandscience : { 
+			id : 11,
+			label : 'Hobbies and Science'
+		},
+		homedesignanddecorating : { 
+			id : 12,
+			label : 'Home Design and Decorating'
+		},
+		vacationsandtravelplanning : { 
+			id : 14,
+			label : 'Vacations and Travel Planning'
+		},
+		holidaysandcelebrations : { 
+			id : 15,
+			label : 'Holidays and Celebrations'
+		},
+		electronics : { 
+			id : 16,
+			label : 'Electronics'
+		},
+		artsandentertainment : { 
+			id : 17,
+			label : 'Arts and Entertainment'
+		},
+		cultureandsociety : { 
+			id : 18,
+			label : 'Culture and Society'
+		},
+		education : { 
+			id : 19,
+			label : 'Education'
+		},
+		internet : { 
+			id : 20,
+			label : 'Internet'
+		},
+		legal : { 
+			id : 21,
+			label : 'Legal'
+		},
+		parenting : { 
+			id : 22,
+			label : 'Parenting'
+		},
+		partiesandentertaining : { 
+			id : 23,
+			label : 'Parties and Entertaining'
+		},
+		personalfinance : { 
+			id : 24,
+			label : 'Personal Finance'
+		},
+		weddings : { 
+			id : 25,
+			label : 'Weddings'
+		}
 	}
 };
 
@@ -63,9 +135,11 @@ module.exports = {
 
 	getCategory: function(cat) {
 		if ( ehow['categories'][cat] ) {
-			return ehow['categories'][cat];
+			return ehow['categories'][cat]['label'];
 		}
 		return false;
-	}
+	},
+
+	categories: ehow.categories
 
 };

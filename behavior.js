@@ -189,19 +189,28 @@ var outlook = function(message, callback) {
 var eHowArticle = function(message, callback) {
 	// Extract keywords here
 	var keywords = [],
+		words = message.toLowerCase().split(' '),
 		positions = {
 			article : message.indexOf('article '),
 			type : message.indexOf('type '),
 			category : message.indexOf(' in ')
-		},
-		tg = ng.trigrams(message);
+		};
 
 	// Extract keywords
-	for(var i=0, e=tg.length; i<e; i++) {
-		console.log(tg[i]);
+	for(var i=0, e=words.length; i<e; i++) {
+		if(ehow.getArticle(words[i])) {
+			keywords.push(words[i]);
+		}
 	}
-	
-	keywords = ['About','Food and Drink']; // temporary
+
+	// Extract Categories
+	message = message.replace(/ /g,'');
+	var cats = ehow.categories;
+	for(var key in cats) {
+		if(message.indexOf(key)>=0) {
+			keywords.push(cats[key]['label']);
+		}
+	}
 
 	// Convert keywords to params
 	var params = '';
@@ -223,7 +232,7 @@ var eHowArticle = function(message, callback) {
 
 	getData(options, dataPath, function(data){
 		var result = fetchDataPoint(data, dataPath),
-			response = "Unable to find the article";
+			response = "Sorry I can't find an article matching: "+keywords.join(', ')+" :(";
 
 		if ( result ) {
 			response = "Here ya go! \n http://www.ehow.com"+result;
