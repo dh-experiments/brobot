@@ -5,7 +5,7 @@
  */
 
 var bot = require('./YBot.js');
-var mappings = require('./config/mappings.js');
+var people = require('./modules/people.js');
 var behavior = require('./behavior.js');
 
 // Initialize out bot
@@ -91,7 +91,7 @@ function OnTypingNotify(from, typing) {
 function OnBuddyRequest(from, fname, lname, message) {
 	console.log('Buddy request from ' + fname + ' ' + lname + ' (' + from + ') [' + message + ']');
 	// Use
-	if ( mappings.validUser(from) ) {
+	if ( people.validUser(from) ) {
 		console.log(from+" approved.");
 		this.ConfirmBuddy(from);
 	} else {

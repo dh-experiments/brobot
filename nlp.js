@@ -1,6 +1,6 @@
 var natural = require('natural');
 var classifier = new natural.BayesClassifier();
-var trainers = require('./config/trainers.js'),
+var trainers = require('./modules/trainers.js'),
 	trainer = trainers.contexts;
 
 /////////////////////////////////////////////////////////////////

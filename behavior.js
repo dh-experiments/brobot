@@ -1,5 +1,8 @@
-var mappings = require('./config/mappings.js');
 var http = require('http');
+
+var ehow = require('./modules/ehow.js'),
+	people = require('./modules/people.js');
+
 var nlp = require('./nlp.js');
 var natural = require('natural'),
 	ng = natural.NGrams;
@@ -13,7 +16,7 @@ module.exports = {
 	// Check user is whitelisted
 	interpretMessage: function(from, message, callback) {
 		
-		var firstName = mappings.handleToName(from);
+		var firstName = people.handleToName(from);
 		var context = nlp.classify(message),
 			verifiedContext = false;
 		var words = message.split(' ');
@@ -25,15 +28,16 @@ module.exports = {
 		switch( context ) {
 
 			case 'ehow':
-				var result = mappings.getArticle(words[2]);
+				// var result = ehow.getArticle(words[2]);
 			
-				if ( result ) {
-					response = "Here's a "+words[2]+" article: \n"+result;
-				} else {
-					response = "Sorry I don't understand what you're looking for yet.";
-				}
+				// if ( result ) {
+				// 	response = "Here's a "+words[2]+" article: \n"+result;
+				// } else {
+				// 	response = "Sorry I don't understand what you're looking for yet.";
+				// }
 
-				eHowArticle(['About','Food and Drink'], callback);
+				eHowArticle(message, callback);
+				usesCallback = true;
 			break;
 
 			case 'outlook':
@@ -182,19 +186,34 @@ var outlook = function(message, callback) {
 	}
 }
 
-var eHowArticle = function(query, callback) {
+var eHowArticle = function(message, callback) {
+	// Extract keywords here
+	var keywords = [],
+		positions = {
+			article : message.indexOf('article '),
+			type : message.indexOf('type '),
+			category : message.indexOf(' in ')
+		},
+		tg = ng.trigrams(message);
 
-	var dataPath = ['response','_id'];
+	// Extract keywords
+	for(var i=0, e=tg.length; i<e; i++) {
+		console.log(tg[i]);
+	}
+	
+	keywords = ['About','Food and Drink']; // temporary
 
+	// Convert keywords to params
 	var params = '';
-
 	// Can't use join, have to add quotation marks myself
-	for(var i=0, e=query.length; i<e; i++) {
-		params += '"'+escape(query[i])+'"';
+	for(var i=0, e=keywords.length; i<e; i++) {
+		params += '"'+escape(keywords[i])+'"';
 		if ( i != e-1 ) {
 			params += ',';
 		}
 	}
+
+	var dataPath = ['response','_id'];
 
 	var options = {
 		host: 'bro.api.ehowdev.com',

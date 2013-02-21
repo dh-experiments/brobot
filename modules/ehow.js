@@ -2,9 +2,6 @@
 // Declarations
 /////////////////////////////////////////////////////////////////
 
-var people = require('./people.js'),
-	users = people.users;
-
 var ehow = {
 	articleTypes : {
 		how : "http://www.ehow.com/how_7796300_grant-sponsor-childrens-books.html",
@@ -57,25 +54,16 @@ var ehow = {
 
 module.exports = {
 
-	// Check user is whitelisted
-	validUser: function(handle) {
-		if ( users[handle] )
-			return true;
-		return false;
-	},
-
-	// Return the user's real first name
-	handleToName: function(handle) {
-		if ( users[handle] ) {
-			return users[handle].first_name;
-		}
-
-		return handle;
-	},
-
 	getArticle: function(type) {
 		if ( ehow['articleTypes'][type] ) {
 			return ehow['articleTypes'][type];
+		}
+		return false;
+	},
+
+	getCategory: function(cat) {
+		if ( ehow['categories'][cat] ) {
+			return ehow['categories'][cat];
 		}
 		return false;
 	}
