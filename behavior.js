@@ -33,7 +33,7 @@ module.exports = {
 					response = "Sorry I don't understand what you're looking for yet.";
 				}
 
-				// eHowArticle({ type : 'About', category : 'Food and Drink' }, callback);
+				eHowArticle(['About','Food and Drink'], callback);
 			break;
 
 			case 'outlook':
@@ -182,34 +182,36 @@ var outlook = function(message, callback) {
 	}
 }
 
-var eHowArticle = function(params, callback) {
+var eHowArticle = function(query, callback) {
 
-	var dataPath = ['response','_id'],
-		path = '/services/bro/?type=2&data={"type":"article"',
-		replyFormat = "Here's a";
+	var dataPath = ['response','_id'];
 
-	if ( params.type ) {
-		path += ',"content_type":"'+params.type+'"';
-		replyFormat += " "+params.type;
+	var params = '';
+
+	// Can't use join, have to add quotation marks myself
+	for(var i=0, e=query.length; i<e; i++) {
+		params += '"'+escape(query[i])+'"';
+		if ( i != e-1 ) {
+			params += ',';
+		}
 	}
-
-	replyFormat += " article";
-
-	if ( params.category ) {
-		path += ',"category":"'+escape(params.category)+'"';
-		replyFormat += " in "+params.category;
-	}
-
-	path += '}&filter={"_id":1}';
-	replyFormat += ":\n http://www.ehow.com%@";
 
 	var options = {
 		host: 'bro.api.ehowdev.com',
 		port: 80,
-		path: path
+		path: '/services/bro/?type=2&data={"type":"article","keywords":['+params+']}&filter={"_id":1}'
 	};
 
-	getData(options, dataPath, callback);
+	getData(options, dataPath, function(data){
+		var result = fetchDataPoint(data, dataPath),
+			response = "Unable to find the article";
+
+		if ( result ) {
+			response = "Here ya go! \n http://www.ehow.com"+result;
+		}
+
+		callback(response);
+	});
 }
 
 var getData = function(params, dataPath, callback) {
