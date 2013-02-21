@@ -46,14 +46,13 @@ module.exports = {
 			'UAT'
 		],
 		stock : [
-			'Stock Price',
+			'stock price',
 			'DMD Stock Price',
 			'DMD',
-			'What is the stock price?',
-			'What is our stock price?',
-			'What is the DMD stock price?',
-			'What is the Demand stock price?',
-			'What is the company stock price?'
+			'the stock price?',
+			'our stock price?',
+			'Demand stock price?',
+			'company stock price?'
 		],
 		eightball : [
 			'will I',

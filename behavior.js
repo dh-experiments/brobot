@@ -20,6 +20,8 @@ module.exports = {
 		var response = "";
 		var usesCallback = false;
 
+		console.log(context);
+
 		switch( context ) {
 
 			case 'ehow':
@@ -35,7 +37,7 @@ module.exports = {
 			break;
 
 			case 'outlook':
-				outlook(words, callback);
+				outlook(message, callback);
 				usesCallback = true;
 			break;
 
@@ -53,11 +55,11 @@ module.exports = {
 			break;
 
 			case 'stock':
-				response = "Temporarily disabled, but context is STOCK";
-				// usesCallback = true;
-				// stockQuote('DMD', function(response){
-				// 	callback(response);
-				// });
+				// response = "Temporarily disabled, but context is STOCK";
+				usesCallback = true;
+				stockQuote('DMD', function(response){
+					callback(response);
+				});
 			break;
 
 			case 'eightball':
@@ -120,41 +122,63 @@ var stockQuote = function(ticker, callback) {
 			path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
 		};
 
-	var replyFormat = "Current "+symbol+" [ http://finance.yahoo.com/q?s="+symbol+" ] price per share: $%@";
-
-	getData(options, replyFormat, dataPath, callback);
+	getData(options, dataPath, function(data){
+		var dataPoint = fetchDataPoint(data, dataPath),
+			reply = "Unable to lookup "+symbol+" at the moment";
+		if ( dataPoint ) {
+			reply = "Current "+symbol+" [ http://finance.yahoo.com/q?s="+symbol+" ] price per share: "+dataPoint;
+		}
+		callback(reply);
+	});
 }
 
-var outlook = function(words, callback) {
+var outlook = function(message, callback) {
 
 	var validName = false,
+		bigrams = ng.bigrams(message),
 		firstName;
 
-	// Recognize name
-	for(var i=0, e=words.length; i<e; i++) {
-		// Get first and last characters
-		var lastChar = words[i].slice(-1),
-			firstChar = words[i].slice(0,1);
-		
-		if( lastChar == "\'s" || (firstChar == firstChar.toUpperCase() && i != 0) ) {
-			firstName = words[i];
+	// Recognize name from bigrams
+	for(var i=0, e=bigrams.length; i<e; i++) {
+		// Get first and last characters of bigrams
+		var wA = [ bigrams[i][0].slice(0,1), bigrams[i][0].slice(-1) ],
+			wB = [ bigrams[i][1].slice(0,1), bigrams[i][1].slice(-1) ];
+
+		// Name conditions
+		if ( wB[0] == 's' || 
+			( wA[0] == wA[0].toUpperCase() && i != 0 ) || 
+				( wA[0] == wA[0].toUpperCase() && wB[0] == wB[0].toUpperCase() ) 
+		) {
+			firstName = bigrams[i][0];
 			validName = true;
-			console.log(words[i]);
+
+			break;
 		}
 	}
 
 	if(validName) {
-		var dataPath = ['response','Business Phone'],
-			path = '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}&filter={"Business%20Phone":1,"_id":0}',
-			replyFormat = firstName+"'s phone is: %@";
+		var dataPath = ['response'];
 
 		var options = {
 			host: 'bro.api.ehowdev.com',
 			port: 80,
-			path: path
+			path: '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}'
 		};
 
-		getData(options, replyFormat, dataPath, callback);
+		getData(options, dataPath, function(data){
+			var people = fetchDataPoint(data, dataPath),
+				response = "Unable to find "+firstName;
+
+			if ( people ) {
+				response = "";
+				for(var i=0, e=people.length; i<e; i++) {
+					response += people[i]['First Name']+" "+people[i]['Last Name']+"'s phone: "+people[i]['Business Phone']+"\n";
+				}
+			}
+			callback(response);
+		});
+	} else {
+		callback("Sorry I can't tell who you're looking for.  Can you ask differently?");
 	}
 }
 
@@ -185,10 +209,10 @@ var eHowArticle = function(params, callback) {
 		path: path
 	};
 
-	getData(options, replyFormat, dataPath, callback);
+	getData(options, dataPath, callback);
 }
 
-var getData = function(params, response, dataPath, callback) {
+var getData = function(params, dataPath, callback) {
 
 	var options = {
 		host: params.host,
@@ -205,14 +229,9 @@ var getData = function(params, response, dataPath, callback) {
 				holder += chunk;
 			}
 		}).on('end', function(){
-			var data = JSON.parse(holder),
-				result = fetchDataPoint(data, dataPath);
-
-			if ( result ) {
-				callback(response.replace('%@',result));
-			} else {
-				callback("Sorry, unable to find what you're looking for.");
-			}
+			var data = JSON.parse(holder);
+			// Pass data back
+			callback(data);
 		});
 
 	}).on('error', function(e) {
