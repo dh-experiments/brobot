@@ -28,14 +28,6 @@ module.exports = {
 		switch( context ) {
 
 			case 'ehow':
-				// var result = ehow.getArticle(words[2]);
-			
-				// if ( result ) {
-				// 	response = "Here's a "+words[2]+" article: \n"+result;
-				// } else {
-				// 	response = "Sorry I don't understand what you're looking for yet.";
-				// }
-
 				eHowArticle(message, callback);
 				usesCallback = true;
 			break;
@@ -46,6 +38,8 @@ module.exports = {
 			break;
 
 			case 'jira':
+				jira(from, message, callback);
+				usesCallback = true;
 			break;
 
 			case 'greeting':
@@ -186,20 +180,50 @@ var outlook = function(message, callback) {
 	}
 }
 
+var jira = function(from, message, callback) {
+
+	var jiraHandle = people.jiraAccount(from);
+
+	// Check account exists
+	if (jiraHandle) {
+
+		var dataPath = ['response'];
+
+		var options = {
+			host: 'bro.api.ehowdev.com',
+			port: 80,
+			path: '/services/bro/?type=0&data={"type":"OPEN_TICKETS"}&filter={"name":"'+jiraHandle+'"}'
+		};
+
+		getData(options, dataPath, function(data){
+			var result = fetchDataPoint(data, dataPath),
+				response = "Here are your tickets: \n";
+
+			if ( result ) {
+				for (var i=0, e=result.length; i<e; i++ ) {
+					response += "http://jira/browse/"+result[i]+"\n";
+				}
+			} else {
+				callback("Can't find any matching tickets.");
+			}
+
+			callback(response);
+		});
+	} else {
+		callback("I can't find your Jira account.");
+	}
+}
+
 var eHowArticle = function(message, callback) {
 	// Extract keywords here
 	var keywords = [],
-		words = message.toLowerCase().split(' '),
-		positions = {
-			article : message.indexOf('article '),
-			type : message.indexOf('type '),
-			category : message.indexOf(' in ')
-		};
+		words = message.toLowerCase().split(' ');
 
 	// Extract keywords
 	for(var i=0, e=words.length; i<e; i++) {
-		if(ehow.getArticle(words[i])) {
-			keywords.push(words[i]);
+		var type = ehow.getArticle(words[i]);
+		if(type) {
+			keywords.push(type);
 		}
 	}
 
@@ -250,6 +274,8 @@ var getData = function(params, dataPath, callback) {
 		path: params.path
 	};
 
+	console.log('Path :'+options.host+options.path);
+
 	var req = http.get(options, function(res) {
 		var holder = "";  // holder
 		res.on('data', function (chunk) {
@@ -259,9 +285,13 @@ var getData = function(params, dataPath, callback) {
 				holder += chunk;
 			}
 		}).on('end', function(){
-			var data = JSON.parse(holder);
-			// Pass data back
-			callback(data);
+			try {
+				var data = JSON.parse(holder);
+				// Pass data back
+				callback(data);
+			} catch(err) {
+				console.log('Invalid data: '+holder);
+			}
 		});
 
 	}).on('error', function(e) {
