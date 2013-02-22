@@ -120,7 +120,7 @@ var stockQuote = function(ticker, callback) {
 			path: '/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env'
 		};
 
-	getData(options, dataPath, function(data){
+	getData(options, function(data){
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "Unable to lookup "+symbol+" at the moment";
 		if ( dataPoint ) {
@@ -163,7 +163,7 @@ var outlook = function(message, callback) {
 			path: '/services/bro/?type=1&data={"First%20Name":"'+firstName+'"}'
 		};
 
-		getData(options, dataPath, function(data){
+		getData(options, function(data){
 			var people = fetchDataPoint(data, dataPath),
 				response = "Unable to find "+firstName;
 
@@ -195,9 +195,9 @@ var jira = function(from, message, callback) {
 			path: '/services/bro/?type=0&data={"type":"OPEN_TICKETS"}&filter={"name":"'+jiraHandle+'"}'
 		};
 
-		getData(options, dataPath, function(data){
+		getData(options, function(data){
 			var result = fetchDataPoint(data, dataPath),
-				response = "Here are your tickets: \n";
+				response = "Hey buddy, here's your tickets: \n";
 
 			if ( result ) {
 				for (var i=0, e=result.length; i<e; i++ ) {
@@ -254,7 +254,7 @@ var eHowArticle = function(message, callback) {
 		path: '/services/bro/?type=2&data={"type":"article","keywords":['+params+']}&filter={"_id":1}'
 	};
 
-	getData(options, dataPath, function(data){
+	getData(options, function(data){
 		var result = fetchDataPoint(data, dataPath),
 			response = "Sorry I can't find an article matching: "+keywords.join(', ')+" :(";
 
@@ -266,7 +266,7 @@ var eHowArticle = function(message, callback) {
 	});
 }
 
-var getData = function(params, dataPath, callback) {
+var getData = function(params, callback) {
 
 	var options = {
 		host: params.host,
