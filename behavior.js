@@ -182,35 +182,42 @@ var outlook = function(message, callback) {
 
 var jira = function(from, message, callback) {
 
-	var jiraHandle = people.jiraAccount(from);
+	var jiraHandle = people.jiraAccount(from),
+		message = message.toLowerCase();
 
-	// Check account exists
-	if (jiraHandle) {
+	// Check relevant
+	if (message.indexOf('tickets')+message.indexOf('jira')+message.indexOf('uat')>=0) {
+		// Check account exists
+		if (jiraHandle) {
 
-		var dataPath = ['response'];
+			var dataPath = ['response'];
 
-		var options = {
-			host: 'bro.api.ehowdev.com',
-			port: 80,
-			path: '/services/bro/?type=0&data={"type":"OPEN_TICKETS"}&filter={"name":"'+jiraHandle+'"}'
-		};
+			var options = {
+				host: 'bro.api.ehowdev.com',
+				port: 80,
+				path: '/services/bro/?type=0&data={"type":"OPEN_TICKETS"}&filter={"name":"'+jiraHandle+'"}'
+			};
 
-		getData(options, function(data){
-			var result = fetchDataPoint(data, dataPath),
-				response = "Hey buddy, here's your tickets: \n";
+			getData(options, function(data){
+				var result = fetchDataPoint(data, dataPath),
+					response = "Hey buddy, here's your tickets: \n";
 
-			if ( result ) {
-				for (var i=0, e=result.length; i<e; i++ ) {
-					response += "http://jira/browse/"+result[i]+"\n";
+				if ( result ) {
+					for (var i=0, e=result.length; i<e; i++ ) {
+						response += "http://jira/browse/"+result[i]+"\n";
+					}
+				} else {
+					response = "Can't find any matching tickets.";
 				}
-			} else {
-				callback("Can't find any matching tickets.");
-			}
 
-			callback(response);
-		});
+				callback(response);
+			});
+		} else {
+			callback("I can't find your Jira account.");
+		}
 	} else {
-		callback("I can't find your Jira account.");
+		// For some reason Jira catches a lot of this stuff.
+		callback(iDontKnow());
 	}
 }
 
