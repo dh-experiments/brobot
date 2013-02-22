@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////
 
 var intranet = {
-	'companyholiday' : 'The next holiday is Monday, May 27th.',
+	'companyholiday' : 'The next holiday is Labor Day on Monday, May 27th.',
 	'dental' : {
 		info : 'Assurant. Click here for more info - http://intranet/benefits/dental-vision/',
 		policy : 'The Dental Group Policy Number is 5447486',
@@ -46,7 +46,7 @@ module.exports = {
 			response = "Sorry I can't seem to find the info.  Maybe ask a real person?";
 
 		// when is the next company holiday?
-		if ( contains(['next','holiday'],lower) ) {
+		if ( contains(['next','holiday'], lower) || contains(['company','holiday'], lower) ) {
 			response = intranet.companyholiday;
 		// dental
 		} else if ( lower.indexOf('dental')>=0 || lower.indexOf('assurant')>=0 ) {
