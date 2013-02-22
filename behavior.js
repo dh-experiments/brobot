@@ -1,7 +1,8 @@
 var http = require('http');
 
 var ehow = require('./modules/ehow.js'),
-	people = require('./modules/people.js');
+	people = require('./modules/people.js'),
+	intranet = require('./modules/intranet.js');
 
 var nlp = require('./nlp.js');
 var natural = require('natural'),
@@ -48,12 +49,16 @@ module.exports = {
 			break;
 
 			case 'hug':
-				response = "*gives you a BIG hug*";
+				if ( message.indexOf('hug')>=0 ) {
+					response = "*gives you a BIG hug*";
+				} else {
+					response = iDontKnow(firstName);
+				}
 				verifiedContext = true;
 			break;
 
 			case 'intranet':
-				response = intranet(from, message);
+				response = intranet.handleMessage(from, message);
 				verifiedContext = true;
 			break;
 
@@ -113,10 +118,6 @@ var iDontKnow = function(name) {
 	}
 
 	return response;
-}
-
-var intranet = function() {
-	return "le sigh";
 }
 
 var stockQuote = function(ticker, callback) {

@@ -66,7 +66,8 @@ module.exports = {
 			'can I'
 		],
 		intranet : [
-			'company holiday',
+			'next company holiday',
+			'company holidays',
 			'days do we get off for Thanksgiving',
 			'plan provider',
 			'group policy',
@@ -87,7 +88,12 @@ module.exports = {
 			'access my stock?',
 			'book travel',
 			'problems with my computer.',
-			'helpdesk'
+			'I have a problem with my computer.',
+			'computer problem',
+			'issue with my computer',
+			'computer issues',
+			'helpdesk',
+			'technical support'
 		],
 		hug : [
 			'hug',
