@@ -5,8 +5,7 @@
 var users = {
 	'nikedunks10' : { 
 		first_name : 'Alex',
-		last_name : 'Lea',
-		jira : 'alex.lea'
+		last_name : 'Lea'
 	},
 	'durkbag2' : {
 		first_name : 'Derek',
@@ -23,6 +22,10 @@ var users = {
 	'dklademand' : {
 		first_name : 'David',
 		last_name : 'Kim'
+	},
+	'dev' : {
+		first_name : 'Alex',
+		last_name : 'Lea'
 	}
 };
 
@@ -54,7 +57,7 @@ module.exports = {
 			if ( user['jira'] ) {
 				return user['jira'];
 			} else {
-				return (user['first_name'].toLowerCase()+'.'+user['last_name']).toLowerCase();
+				return (user['first_name']+'.'+user['last_name']).toLowerCase();
 			}
 		}
 		return false;
