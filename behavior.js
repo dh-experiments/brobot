@@ -52,8 +52,8 @@ module.exports = {
 				verifiedContext = true;
 			break;
 
-			case 'oracle':
-				response = oracle();
+			case 'intranet':
+				response = intranet(from, message);
 				verifiedContext = true;
 			break;
 
@@ -115,7 +115,7 @@ var iDontKnow = function(name) {
 	return response;
 }
 
-var oracle = function() {
+var intranet = function() {
 	return "le sigh";
 }
 
