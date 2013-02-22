@@ -170,7 +170,7 @@ var yelp = function(message, callback) {
 
 		var larger = (positions.at >= positions.to) ? positions.at : positions.to;
 
-		var place = message.slice(larger+4, message.length-1);
+		var place = message.slice(larger+4, message.length);
 		var dataPath = ['response'];
 		var options = {
 			host: 'bro.api.ehowdev.com',
