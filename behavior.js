@@ -18,13 +18,14 @@ module.exports = {
 	interpretMessage: function(from, message, callback) {
 		
 		var firstName = people.handleToName(from);
-		var context = nlp.classify(message),
+		var context = nlp.classify(message.toLowerCase()),
 			verifiedContext = false;
 		var words = message.split(' ');
 		var response = "";
 		var usesCallback = false;
 
-		console.log(context);
+		// output context
+		console.log('['+context+']');
 
 		switch( context ) {
 
@@ -128,6 +129,32 @@ var iDontKnow = function(name) {
 	}
 
 	return response;
+}
+
+var maps = function(message, callback) {
+
+	var place = 'Staples Center';
+	var dataPath = ['response'];
+	var options = {
+		host: 'bro.api.ehowdev.com',
+		port: 80,
+		path: '/services/bro/?type=6&data=%7B"keyword":"'+escape(place)+'"%7D'
+	};
+
+	getData(options, function(data){
+		var dataPoint = fetchDataPoint(data, dataPath),
+			reply = "I can't find "+place;
+		if ( dataPoint ) {
+			reply = ( Math.floor(Math.random()*7) == 3 ) ? "Take me with you! \n\n" : "";
+			reply += dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
+			reply += dataPoint['address']+'\n';
+			reply += dataPoint['city']+'\n';
+			reply += dataPoint['zip']+'\n';
+			reply += dataPoint['phone']+'\n';
+			reply += dataPoint['url']+'\n';
+		}
+		callback(reply);
+	});
 }
 
 var yelp = function(message, callback) {
@@ -244,7 +271,7 @@ var jira = function(from, message, callback) {
 		message = message.toLowerCase();
 
 	// Check relevant
-	if (message.indexOf('tickets')+message.indexOf('jira')+message.indexOf('uat')>=0) {
+	if (message.indexOf('tickets')>=0 || message.indexOf('jira')>=0 || message.indexOf('uat')>=0) {
 		// Check account exists
 		if (jiraHandle) {
 

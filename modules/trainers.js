@@ -20,7 +20,7 @@ module.exports = {
 			'contact info',
 			'office',
 			'office number',
-			'how can I reach'
+			'how can i reach'
 		],
 		greeting : [
 			'hi',
@@ -37,13 +37,13 @@ module.exports = {
 			'assigned to me',
 			'tickets do I have',
 			'outstanding tickets',
-			'I am working on',
+			'i am working on ',
 			'open tickets assigned to me',
 			'my jira tickets',
 			'ticket released',
 			'status of ticket',
-			'UAT URL of EH',
-			'UAT'
+			'UAT',
+			'uat'
 		],
 		stock : [
 			'stock price',
@@ -55,15 +55,12 @@ module.exports = {
 			'company stock price?'
 		],
 		eightball : [
-			'will I',
+			'will i',
 			'will we',
 			'do you think',
-			'am I',
 			'does she',
 			'does he',
-			'do I',
-			'am I',
-			'can I'
+			'am i going'
 		],
 		yelp : [
 			'bar',
@@ -76,11 +73,11 @@ module.exports = {
 			'eat food',
 			'reservation',
 			'make a reservation',
-			'drink at',
+			'drink at ',
 			'get drinks',
 			'yelp',
 			'shop',
-			'dine at'
+			'dine at '
 		],
 		intranet : [
 			'next company holiday',
@@ -91,7 +88,7 @@ module.exports = {
 			'days do we get off for Thanksgiving',
 			'plan provider',
 			'group policy',
-			'Assurant',
+			'assurant',
 			'vision plan provider',
 			'vision group policy',
 			'VSP?',
@@ -118,7 +115,6 @@ module.exports = {
 		hug : [
 			'hug',
 			'need a hug',
-			'I need a hug',
 			'give me a hug'
 		]
 	}
