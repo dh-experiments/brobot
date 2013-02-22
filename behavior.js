@@ -52,6 +52,11 @@ module.exports = {
 				verifiedContext = true;
 			break;
 
+			case 'oracle':
+				response = oracle();
+				verifiedContext = true;
+			break;
+
 			case 'stock':
 				// response = "Temporarily disabled, but context is STOCK";
 				usesCallback = true;
@@ -108,6 +113,10 @@ var iDontKnow = function(name) {
 	}
 
 	return response;
+}
+
+var oracle = function() {
+	return "le sigh";
 }
 
 var stockQuote = function(ticker, callback) {
@@ -200,11 +209,11 @@ var jira = function(from, message, callback) {
 
 			getData(options, function(data){
 				var result = fetchDataPoint(data, dataPath),
-					response = "Hey buddy, here's your tickets: \n";
+					response = "Hey buddy, here's your tickets: \n\n";
 
 				if ( result ) {
 					for (var i=0, e=result.length; i<e; i++ ) {
-						response += "http://jira/browse/"+result[i]+"\n";
+						response += result[i]['summary']+" - http://jira/browse/"+result[i]['key']+"\n";
 					}
 				} else {
 					response = "Can't find any matching tickets.";
