@@ -83,6 +83,9 @@ module.exports = {
 		],
 		intranet : [
 			'next company holiday',
+			'when is the next company holiday',
+			'next holiday',
+			'are the company holidays',
 			'company holidays',
 			'days do we get off for Thanksgiving',
 			'plan provider',

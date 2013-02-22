@@ -131,18 +131,19 @@ var iDontKnow = function(name) {
 }
 
 var yelp = function(message, callback) {
-	var place = 'Whole Foods';
+	
 
 	var positions = {
 		at : message.indexOf('at'),
 		to : message.indexOf('to')
 	};
 
-	
-	for(var i=0, e=tokenized.length; i<e; i++) {
+	var larger = (positions.at >= positions.to) ? positions.at : positions.to;
 
-	}
+	var place = message.slice(larger);
+	console.log(place);
 
+	var place = 'Whole Foods';
 
 	var dataPath = ['response'];
 	var options = {

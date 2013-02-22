@@ -54,7 +54,7 @@ module.exports = {
 			if ( user['jira'] ) {
 				return user['jira'];
 			} else {
-				return (user['first_name']+'.'+user['last_name']).toLowerCase();
+				return (user['first_name'].toLowerCase()+'.'+user['last_name']).toLowerCase();
 			}
 		}
 		return false;
