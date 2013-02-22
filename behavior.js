@@ -82,8 +82,15 @@ module.exports = {
 			break;
 
 			case 'eightball':
-				response = eightball();
-				verifiedContext = true;
+				// OVERRIDE
+				var lower = message.toLowerCase();
+				if ( lower.indexOf('maestros') >=0 && lower.indexOf('how long')>=0 ) {
+					usesCallback = true;
+					maps(message, callback);
+				} else {
+					response = eightball();
+					verifiedContext = true;
+				}
 			break;
 
 			default:
@@ -133,25 +140,20 @@ var iDontKnow = function(name) {
 
 var maps = function(message, callback) {
 
-	var place = 'Staples Center';
+	var place = 'Maestros in Beverly Hills';
 	var dataPath = ['response'];
 	var options = {
 		host: 'bro.api.ehowdev.com',
 		port: 80,
-		path: '/services/bro/?type=6&data=%7B"keyword":"'+escape(place)+'"%7D'
+		path: '/services/bro/?type=6&data=%7B"destination":"'+escape(place)+'"%7D'
 	};
 
 	getData(options, function(data){
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "I can't find "+place;
 		if ( dataPoint ) {
-			reply = ( Math.floor(Math.random()*7) == 3 ) ? "Take me with you! \n\n" : "";
-			reply += dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
-			reply += dataPoint['address']+'\n';
-			reply += dataPoint['city']+'\n';
-			reply += dataPoint['zip']+'\n';
-			reply += dataPoint['phone']+'\n';
-			reply += dataPoint['url']+'\n';
+			reply = "I checked Google maps for you.  It will take: "+dataPoint['duration']+'\n';
+			reply += dataPoint['link']+'\n';
 		}
 		callback(reply);
 	});
