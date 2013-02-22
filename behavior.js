@@ -84,7 +84,7 @@ module.exports = {
 			case 'eightball':
 				// OVERRIDE
 				var lower = message.toLowerCase();
-				if ( lower.indexOf('maestros') >=0 && lower.indexOf('how long')>=0 ) {
+				if ( lower.indexOf('mastros') >=0 && lower.indexOf('how long')>=0 ) {
 					usesCallback = true;
 					maps(message, callback);
 				} else {
@@ -140,7 +140,7 @@ var iDontKnow = function(name) {
 
 var maps = function(message, callback) {
 
-	var place = 'Maestros in Beverly Hills';
+	var place = 'Mastros in Beverly Hills';
 	var dataPath = ['response'];
 	var options = {
 		host: 'bro.api.ehowdev.com',

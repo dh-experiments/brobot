@@ -7,7 +7,7 @@
 var bot = require('./YBot.js');
 var people = require('./modules/people.js');
 var behavior = require('./behavior.js');
-var DEVMODE = true;
+var DEVMODE = false;
 
 // Initialize out bot
 var Bot = new bot.YBot('dmbrobot', 'thisisatest');
