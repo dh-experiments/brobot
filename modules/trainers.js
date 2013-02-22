@@ -78,7 +78,8 @@ module.exports = {
 			'make a reservation',
 			'drink at',
 			'get drinks',
-			'yelp'
+			'yelp',
+			'shop'
 		],
 		intranet : [
 			'next company holiday',

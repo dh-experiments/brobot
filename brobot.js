@@ -122,7 +122,7 @@ if(DEVMODE) {
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 	process.stdin.on('data', function (chunk) {
-		OnInstantMessage('Console', chunk);
+		OnInstantMessage('Dev', chunk);
 	});
 } else {
 	// Start the bot process
