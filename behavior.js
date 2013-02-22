@@ -133,7 +133,7 @@ var stockQuote = function(ticker, callback) {
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "Unable to lookup "+symbol+" at the moment";
 		if ( dataPoint ) {
-			reply = "Current "+symbol+" [ http://finance.yahoo.com/q?s="+symbol+" ] price per share: "+dataPoint;
+			reply = "Current "+symbol+" price per share: $"+dataPoint+"\nhttp://finance.yahoo.com/q?s="+symbol;
 		}
 		callback(reply);
 	});
@@ -290,7 +290,7 @@ var getData = function(params, callback) {
 		path: params.path
 	};
 
-	console.log('Path :'+options.host+options.path);
+	console.log('[Path] '+options.host+options.path);
 
 	var req = http.get(options, function(res) {
 		var holder = "";  // holder
