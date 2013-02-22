@@ -173,7 +173,7 @@ module.exports = {
 
 	getArticle: function(type) {
 		if ( ehow['articleTypes'][type] ) {
-			return ehow['articleTypes'][type][label];
+			return ehow['articleTypes'][type]['label'];
 		}
 		return false;
 	},
