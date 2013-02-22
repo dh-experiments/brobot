@@ -132,39 +132,39 @@ var iDontKnow = function(name) {
 
 var yelp = function(message, callback) {
 	
+	// Expect the words at or to in yelp searches
+	if ( message.indexOf(' at ')>=0 || message.indexOf(' to ')>=0 ) {
+		var positions = {
+			at : message.indexOf(' at '),
+			to : message.indexOf(' to ')
+		};
 
-	var positions = {
-		at : message.indexOf('at'),
-		to : message.indexOf('to')
-	};
+		var larger = (positions.at >= positions.to) ? positions.at : positions.to;
 
-	var larger = (positions.at >= positions.to) ? positions.at : positions.to;
+		var place = message.slice(larger+4, message.length-1);
+		var dataPath = ['response'];
+		var options = {
+			host: 'bro.api.ehowdev.com',
+			port: 80,
+			path: '/services/bro/?type=5&data=&filter=%7B"keyword":"'+escape(place)+'"%7D'
+		};
 
-	var place = message.slice(larger);
-	console.log(place);
-
-	var place = 'Whole Foods';
-
-	var dataPath = ['response'];
-	var options = {
-		host: 'bro.api.ehowdev.com',
-		port: 80,
-		path: '/services/bro/?type=5&data=&filter=%7B"keyword":"'+escape(place)+'"%7D'
-	};
-
-	getData(options, function(data){
-		var dataPoint = fetchDataPoint(data, dataPath),
-			reply = "I can't find "+place;
-		if ( dataPoint ) {
-			reply = dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
-			reply += dataPoint['address']+'\n';
-			reply += dataPoint['city']+'\n';
-			reply += dataPoint['zip']+'\n';
-			reply += dataPoint['phone']+'\n';
-			reply += dataPoint['url']+'\n';
-		}
-		callback(reply);
-	});
+		getData(options, function(data){
+			var dataPoint = fetchDataPoint(data, dataPath),
+				reply = "I can't find "+place;
+			if ( dataPoint ) {
+				reply = dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
+				reply += dataPoint['address']+'\n';
+				reply += dataPoint['city']+'\n';
+				reply += dataPoint['zip']+'\n';
+				reply += dataPoint['phone']+'\n';
+				reply += dataPoint['url']+'\n';
+			}
+			callback(reply);
+		});
+	} else {
+		callback("I'm not quite sure what you want");
+	}
 }
 
 var stockQuote = function(ticker, callback) {
