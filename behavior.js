@@ -133,6 +133,17 @@ var iDontKnow = function(name) {
 var yelp = function(message, callback) {
 	var place = 'Whole Foods';
 
+	var positions = {
+		at : message.indexOf('at'),
+		to : message.indexOf('to')
+	};
+
+	
+	for(var i=0, e=tokenized.length; i<e; i++) {
+
+	}
+
+
 	var dataPath = ['response'];
 	var options = {
 		host: 'bro.api.ehowdev.com',
@@ -188,7 +199,7 @@ var outlook = function(message, callback) {
 			wB = [ bigrams[i][1].slice(0,1), bigrams[i][1].slice(-1) ];
 
 		// Name conditions
-		if ( wB[0] == 's' || 
+		if ( wB[0] == 's' && bigrams[i][0].toLowerCase()!='what' || 
 			( wA[0] == wA[0].toUpperCase() && i != 0 ) || 
 				( wA[0] == wA[0].toUpperCase() && wB[0] == wB[0].toUpperCase() ) 
 		) {
@@ -212,7 +223,7 @@ var outlook = function(message, callback) {
 			var people = fetchDataPoint(data, dataPath),
 				response = "Unable to find "+firstName;
 
-			if ( people ) {
+			if ( people && people.length>0 ) {
 				response = "";
 				for(var i=0, e=people.length; i<e; i++) {
 					response += people[i]['First Name']+" "+people[i]['Last Name']+"'s phone: "+people[i]['Business Phone']+"\n";
