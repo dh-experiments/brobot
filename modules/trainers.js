@@ -65,6 +65,21 @@ module.exports = {
 			'am I',
 			'can I'
 		],
+		yelp : [
+			'bar',
+			'restaurant',
+			'eat at',
+			'nearby bar',
+			'bar nearby',
+			'nearby restaurant',
+			'food nearby',
+			'eat food',
+			'reservation',
+			'make a reservation',
+			'drink at',
+			'get drinks',
+			'yelp'
+		],
 		intranet : [
 			'next company holiday',
 			'company holidays',

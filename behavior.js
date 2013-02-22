@@ -57,6 +57,16 @@ module.exports = {
 				verifiedContext = true;
 			break;
 
+			case 'yelp':
+				yelp(message, callback);
+				usesCallback = true;
+			break;
+
+			case 'maps':
+				googlemaps(from, message, callback);
+				usesCallback = true;
+			break;
+
 			case 'intranet':
 				response = intranet.handleMessage(from, message);
 				verifiedContext = true;
@@ -118,6 +128,31 @@ var iDontKnow = function(name) {
 	}
 
 	return response;
+}
+
+var yelp = function(message, callback) {
+	var place = 'Whole Foods';
+
+	var dataPath = ['response'];
+	var options = {
+		host: 'bro.api.ehowdev.com',
+		port: 80,
+		path: '/services/bro/?type=5&data=&filter=%7B"keyword":"'+place+'"%7D'
+	};
+
+	getData(options, function(data){
+		var dataPoint = fetchDataPoint(data, dataPath),
+			reply = "I can't find "+place;
+		if ( dataPoint ) {
+			reply = dataPoint['name']+'(Rating: '+dataPoint['avg_rating']+')\n';
+			reply += dataPoint['address']+'\n';
+			reply += dataPoint['city']+'\n';
+			reply += dataPoint['zip']+'\n';
+			reply += dataPoint['phone']+'\n';
+			reply += dataPoint['url']+'\n';
+		}
+		callback(reply);
+	});
 }
 
 var stockQuote = function(ticker, callback) {
