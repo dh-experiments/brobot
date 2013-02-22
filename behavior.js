@@ -84,7 +84,7 @@ module.exports = {
 			case 'eightball':
 				// OVERRIDE
 				var lower = message.toLowerCase();
-				if ( lower.indexOf('mastros') >=0 && lower.indexOf('how long')>=0 ) {
+				if ( lower.indexOf('mastro') >=0 && lower.indexOf('how long')>=0 ) {
 					usesCallback = true;
 					maps(message, callback);
 				} else {
