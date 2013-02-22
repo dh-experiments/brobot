@@ -153,7 +153,7 @@ var yelp = function(message, callback) {
 			var dataPoint = fetchDataPoint(data, dataPath),
 				reply = "I can't find "+place;
 			if ( dataPoint ) {
-				reply = (Math.random()*7==3) ? "Take me with you! \n" : "";
+				reply = ( Math.floor(Math.random()*7) == 3 ) ? "Take me with you! \n\n" : "";
 				reply += dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
 				reply += dataPoint['address']+'\n';
 				reply += dataPoint['city']+'\n';
