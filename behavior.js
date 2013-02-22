@@ -137,14 +137,14 @@ var yelp = function(message, callback) {
 	var options = {
 		host: 'bro.api.ehowdev.com',
 		port: 80,
-		path: '/services/bro/?type=5&data=&filter=%7B"keyword":"'+place+'"%7D'
+		path: '/services/bro/?type=5&data=&filter=%7B"keyword":"'+escape(place)+'"%7D'
 	};
 
 	getData(options, function(data){
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "I can't find "+place;
 		if ( dataPoint ) {
-			reply = dataPoint['name']+'(Rating: '+dataPoint['avg_rating']+')\n';
+			reply = dataPoint['name']+' (Rating: '+dataPoint['avg_rating']+')\n';
 			reply += dataPoint['address']+'\n';
 			reply += dataPoint['city']+'\n';
 			reply += dataPoint['zip']+'\n';

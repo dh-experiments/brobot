@@ -7,6 +7,7 @@
 var bot = require('./YBot.js');
 var people = require('./modules/people.js');
 var behavior = require('./behavior.js');
+var DEVMODE = true;
 
 // Initialize out bot
 var Bot = new bot.YBot('dmbrobot', 'thisisatest');
@@ -116,6 +117,14 @@ function OnReply(from, response) {
 	this.SendMessage(from, response);
 }
 
-
-// Start the bot process
-Bot.Start();
+// Dev Mode
+if(DEVMODE) {
+	process.stdin.resume();
+	process.stdin.setEncoding('utf8');
+	process.stdin.on('data', function (chunk) {
+		OnInstantMessage('Console', chunk);
+	});
+} else {
+	// Start the bot process
+	Bot.Start();
+}
