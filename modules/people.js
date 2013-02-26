@@ -23,6 +23,11 @@ var users = {
 		first_name : 'David',
 		last_name : 'Kim'
 	},
+	'andrewchan0120' : {
+		first_name : 'Andrew',
+		last_name : 'Chan',
+		jira : 'andrewchan'
+	},
 	'dev' : {
 		first_name : 'Alex',
 		last_name : 'Lea'
