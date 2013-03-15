@@ -23,6 +23,10 @@ var users = {
 		first_name : 'David',
 		last_name : 'Kim'
 	},
+	'smallbloc_az' : {
+		first_name : 'Michael',
+		last_name : 'Kriskovic'
+	},
 	'andrewchan0120' : {
 		first_name : 'Andrew',
 		last_name : 'Chan',
