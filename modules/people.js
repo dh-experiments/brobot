@@ -23,18 +23,23 @@ var users = {
 		first_name : 'David',
 		last_name : 'Kim'
 	},
-	'smallbloc_az' : {
-		first_name : 'Michael',
-		last_name : 'Kriskovic'
+	'dev' : {
+		first_name : 'Alex',
+		last_name : 'Lea'
 	},
+	// Non-Brogrammers
 	'andrewchan0120' : {
 		first_name : 'Andrew',
 		last_name : 'Chan',
 		jira : 'andrewchan'
 	},
-	'dev' : {
-		first_name : 'Alex',
-		last_name : 'Lea'
+	'creativecody' : {
+		first_name : 'Cody',
+		last_name : 'Silva'
+	},
+	'smallbloc_az' : {
+		first_name : 'Michael',
+		last_name : 'Kriskovic'
 	}
 };
 

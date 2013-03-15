@@ -10,7 +10,7 @@ var behavior = require('./behavior.js');
 var DEVMODE = false;
 
 // Initialize out bot
-var Bot = new bot.YBot('brobotdm', 'thisisatest');
+var Bot = new bot.YBot('dmbrobot', 'thisisatest');  // Accts: brobotdm, dmbrobot
 
 // Register event callbacks
 Bot.on('error', OnError);
