@@ -410,72 +410,72 @@ var fetchDataPoint = function(data, levels) {
 }
 
 var math = function evalExpression(text) {
-  
-  text = text.replace(/\s/g, "");
-  text = text.replace(/(\D+)/g, ' $1 ');
-  var tokens = text.split(" ");
+	
+	text = text.replace(/\s/g, "");
+	text = text.replace(/(\D+)/g, ' $1 ');
+	var tokens = text.split(" ");
 
-  var output = [];
-  var operators = [];
+	var output = [];
+	var operators = [];
 
-  var reNumber = /^\d+(\.\d+)?$/;
-  var reOperator = /^[\/\+\*\-]$/;
-  var precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
+	var reNumber = /^\d+(\.\d+)?$/;
+	var reOperator = /^[\/\+\*\-]$/;
+	var precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
 
-  for (var i = 0; i < tokens.length; ++i)
-  {
-    var t = tokens[i];
-    if (reNumber.test(t))
-      output.push(Number(t));
-    else if (reOperator.test(t))
-    {
-      while (operators.length && precedence[t] <= precedence[operators[operators.length - 1]])
-      {
-        output.push(operators.pop());
-      }
+	for (var i = 0; i < tokens.length; ++i)
+	{
+		var t = tokens[i];
+		if (reNumber.test(t))
+			output.push(Number(t));
+		else if (reOperator.test(t))
+		{
+			while (operators.length && precedence[t] <= precedence[operators[operators.length - 1]])
+			{
+				output.push(operators.pop());
+			}
 
-      operators.push(t);
-    }
-    else if (t == "(")
-      operators.push(t);
-    else if (t == ")")
-    {
-      while (operators.length && operators[operators.length - 1] != "(")
-        output.push(operators.pop());
+			operators.push(t);
+		}
+		else if (t == "(")
+			operators.push(t);
+		else if (t == ")")
+		{
+			while (operators.length && operators[operators.length - 1] != "(")
+				output.push(operators.pop());
 
-      if (!operators.length) return false;
+			if (!operators.length) return false;
 
-      operators.pop();    
-    }
-    else 
-      return false;
-  }
+			operators.pop();    
+		}
+		else 
+			return false;
+	}
 
-  while (operators.length)
-    output.push(operators.pop());
+	while (operators.length)
+		output.push(operators.pop());
 
-  var result = [];
+	var result = [];
 
-  for (i = 0; i < output.length; ++i)
-  {
-    t = output[i];
-    if (reNumber.test(t))
-      result.push(t);
-    else if (t == "(" || result.length < 2)
-      return false;
-    else 
-    {
-      var rhs = result.pop();
-        var lhs = result.pop();
+	for (i = 0; i < output.length; ++i)
+	{
+		t = output[i];
+		if (reNumber.test(t))
+			result.push(t);
+		else if (t == "(" || result.length < 2)
+			return false;
+		else 
+		{
+			var rhs = result.pop();
+			var lhs = result.pop();
 
-      if (t == "+") result.push(lhs + rhs);
-      if (t == "-") result.push(lhs - rhs);
-      if (t == "*") result.push(lhs * rhs);
-      if (t == "/") result.push(lhs / rhs);
-    }
-  }
+			if (t == "+") result.push(lhs + rhs);
+			if (t == "-") result.push(lhs - rhs);
+			if (t == "*") result.push(lhs * rhs);
+			if (t == "/") result.push(lhs / rhs);
+		}
+	}
 
-  return result.pop();
+	return result.pop();
 }
 
 var eightball = function() {
