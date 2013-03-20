@@ -84,7 +84,7 @@ module.exports = {
 			case 'eightball':
 				// OVERRIDE
 				var lower = message.toLowerCase();
-				if ( lower.indexOf('mastro') >=0 && lower.indexOf('how long')>=0 ) {
+				if ( lower.indexOf('osteria') >=0 && lower.indexOf('how long')>=0 ) {
 					usesCallback = true;
 					maps(message, callback);
 				} else {
@@ -140,7 +140,7 @@ var iDontKnow = function(name) {
 
 var maps = function(message, callback) {
 
-	var place = 'Mastros in Beverly Hills';
+	var place = 'Osteria Mozza in Los Angeles';
 	var dataPath = ['response'];
 	var options = {
 		host: 'bro.api.ehowdev.com',
@@ -407,6 +407,75 @@ var fetchDataPoint = function(data, levels) {
 	}
 
 	return result;
+}
+
+var math = function evalExpression(text) {
+  
+  text = text.replace(/\s/g, "");
+  text = text.replace(/(\D+)/g, ' $1 ');
+  var tokens = text.split(" ");
+
+  var output = [];
+  var operators = [];
+
+  var reNumber = /^\d+(\.\d+)?$/;
+  var reOperator = /^[\/\+\*\-]$/;
+  var precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
+
+  for (var i = 0; i < tokens.length; ++i)
+  {
+    var t = tokens[i];
+    if (reNumber.test(t))
+      output.push(Number(t));
+    else if (reOperator.test(t))
+    {
+      while (operators.length && precedence[t] <= precedence[operators[operators.length - 1]])
+      {
+        output.push(operators.pop());
+      }
+
+      operators.push(t);
+    }
+    else if (t == "(")
+      operators.push(t);
+    else if (t == ")")
+    {
+      while (operators.length && operators[operators.length - 1] != "(")
+        output.push(operators.pop());
+
+      if (!operators.length) return false;
+
+      operators.pop();    
+    }
+    else 
+      return false;
+  }
+
+  while (operators.length)
+    output.push(operators.pop());
+
+  var result = [];
+
+  for (i = 0; i < output.length; ++i)
+  {
+    t = output[i];
+    if (reNumber.test(t))
+      result.push(t);
+    else if (t == "(" || result.length < 2)
+      return false;
+    else 
+    {
+      var rhs = result.pop();
+        var lhs = result.pop();
+
+      if (t == "+") result.push(lhs + rhs);
+      if (t == "-") result.push(lhs - rhs);
+      if (t == "*") result.push(lhs * rhs);
+      if (t == "/") result.push(lhs / rhs);
+    }
+  }
+
+  return result.pop();
 }
 
 var eightball = function() {
