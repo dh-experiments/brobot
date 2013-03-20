@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////
 
 var intranet = {
-	'companyholiday' : 'The next holiday is Labor Day on Monday, May 27th.',
+	'companyholiday' : 'The next holiday is Memorial Day on Monday, May 27th.',
 	'dental' : {
 		info : 'Assurant. Click here for more info - http://intranet/benefits/dental-vision/',
 		policy : 'The Dental Group Policy Number is 5447486',
