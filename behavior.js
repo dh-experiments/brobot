@@ -197,7 +197,21 @@ var yelp = function(message, callback) {
 	}
 }
 
+var lastChecked = new Date(),
+	lastStock = {
+		ticker : 'DMD',
+		price : 8.69,
+		init : false
+	};
+
 var stockQuote = function(ticker, callback) {
+
+	var t = new Date();
+	if ( lastChecked-t < 600000 && lastStock.init ) {
+		var reply = lastStock.ticker+" price per share: $"+lastStock.price+"\nhttp://finance.yahoo.com/q?s="+lastStock.ticker;
+		callback(reply);
+		return;
+	}
 
 	var symbol = ticker || 'DMD',
 		dataPath = ['query','results','quote','LastTradePriceOnly'],
@@ -211,6 +225,9 @@ var stockQuote = function(ticker, callback) {
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "Unable to lookup "+symbol+" at the moment";
 		if ( dataPoint ) {
+			lastStock.ticker = symbol;
+			lastStock.price = dataPoint;
+			lastStock.init = true;
 			reply = "Current "+symbol+" price per share: $"+dataPoint+"\nhttp://finance.yahoo.com/q?s="+symbol;
 		}
 		callback(reply);
