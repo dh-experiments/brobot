@@ -206,8 +206,9 @@ var lastChecked = new Date(),
 
 var stockQuote = function(ticker, callback) {
 
-	var t = new Date();
-	if ( lastChecked-t < 600000 && lastStock.init ) {
+	var elapsed = new Date() - lastChecked;
+
+	if ( elapsed < 600000 && lastStock.init ) {
 		var reply = lastStock.ticker+" price per share: $"+lastStock.price+"\nhttp://finance.yahoo.com/q?s="+lastStock.ticker;
 		callback(reply);
 		return;
