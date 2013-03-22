@@ -206,7 +206,8 @@ var lastChecked = new Date(),
 
 var stockQuote = function(ticker, callback) {
 
-	var elapsed = new Date() - lastChecked;
+	var currentTime = new Date();
+	var elapsed = currentTime - lastChecked;
 
 	if ( elapsed < 600000 && lastStock.init ) {
 		var reply = lastStock.ticker+" price per share: $"+lastStock.price+"\nhttp://finance.yahoo.com/q?s="+lastStock.ticker;
@@ -226,6 +227,7 @@ var stockQuote = function(ticker, callback) {
 		var dataPoint = fetchDataPoint(data, dataPath),
 			reply = "Unable to lookup "+symbol+" at the moment";
 		if ( dataPoint ) {
+			lastChecked = currentTime;
 			lastStock.ticker = symbol;
 			lastStock.price = dataPoint;
 			lastStock.init = true;
