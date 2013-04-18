@@ -30,7 +30,7 @@ var users = {
 	'thecalvinchan' : {
 		first_name : 'Calvin',
 		last_name : 'Chan'
-	}
+	},
 	// Non-Brogrammers
 	'andrewchan0120' : {
 		first_name : 'Andrew',
